@@ -6,6 +6,12 @@
 
 ---
 
+## Live Preview
+
+GitHub Pages에서 정적 미리보기 화면을 확인할 수 있습니다.
+
+- [Open Preview](https://code88morning-cmd.github.io/hotel-sto-simulator/preview.html)
+
 ## 1. Project Overview
 
 **Hotel STO Lab**은 호텔 객실 운영 수익을 예시로 사용하여 STO 구조를 학습할 수 있도록 만든 금융교육형 시뮬레이션 프로젝트입니다.
@@ -374,7 +380,11 @@ db/seed.sql
 
 ### 12.1 Preview Only
 
-정적 HTML 목업만 확인하려면 다음 파일을 브라우저에서 열면 됩니다.
+GitHub Pages 미리보기 링크에서 정적 HTML 목업을 확인할 수 있습니다.
+
+- [Open Preview](https://code88morning-cmd.github.io/hotel-sto-simulator/preview.html)
+
+로컬에서 확인하려면 다음 파일을 브라우저에서 열면 됩니다.
 
 ```text
 preview/index.html
