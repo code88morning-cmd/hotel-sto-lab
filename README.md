@@ -10,7 +10,7 @@
 
 GitHub Pages에서 정적 미리보기 화면을 확인할 수 있습니다.
 
-- [Open Preview](https://code88morning-cmd.github.io/hotel-sto-simulator/preview.html)
+- [Open Preview](https://code88morning-cmd.github.io/hotel-sto-lab/preview.html)
 
 ## 1. Project Overview
 
