@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotel STO Quest - Gamified STO Learning</title>
+  <style>
+    :root {
+      --bg-1: #f7f3ff;
+      --bg-2: #eef7ff;
+      --purple: #6d5dfc;
+      --purple-dark: #342a86;
+      --pink: #ff6fae;
+      --cyan: #26c6da;
+      --yellow: #ffd166;
+      --green: #21b573;
+      --red: #ef476f;
+      --navy: #17213b;
+      --text: #26324d;
+      --muted: #6f7a99;
+      --line: #e5e9f5;
+      --card: rgba(255, 255, 255, 0.92);
+      --shadow: 0 18px 40px rgba(57, 48, 134, 0.14);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Noto Sans KR", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 5%, rgba(255, 111, 174, .22), transparent 28%),
+        radial-gradient(circle at 88% 2%, rgba(38, 198, 218, .22), transparent 30%),
+        radial-gradient(circle at 75% 80%, rgba(255, 209, 102, .24), transparent 28%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      letter-spacing: -0.025em;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 56px;
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 255, 255, .85);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .72);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 30px rgba(57, 48, 134, .08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      font-size: 24px;
+      box-shadow: 0 12px 24px rgba(109, 93, 252, .28);
+    }
+
+    .brand strong {
+      display: block;
+      color: var(--navy);
+      font-size: 18px;
+      font-weight: 950;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .nav-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: #fff;
+      color: var(--purple-dark);
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+
+    .pill.primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      box-shadow: none;
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+      gap: 22px;
+      margin-top: 24px;
+      align-items: stretch;
+    }
+
+    .hero-main,
+    .quest-card,
+    .card {
+      border: 1px solid rgba(255, 255, 255, .85);
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-main {
+      position: relative;
+      overflow: hidden;
+      padding: 34px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 75% 12%, rgba(255, 255, 255, .22), transparent 28%),
+        linear-gradient(135deg, #342a86 0%, #6d5dfc 50%, #ff6fae 100%);
+    }
+
+    .hero-main::before,
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .14);
+    }
+
+    .hero-main::before { width: 210px; height: 210px; right: -70px; bottom: -80px; }
+    .hero-main::after { width: 120px; height: 120px; right: 135px; top: 28px; }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 20px;
+    }
+
+    .mini-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .18);
+      color: rgba(255, 255, 255, .94);
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 720px;
+      font-size: clamp(34px, 5vw, 60px);
+      line-height: 1.02;
+      letter-spacing: -0.065em;
+    }
+
+    .hero-main p {
+      max-width: 660px;
+      margin: 18px 0 0;
+      color: rgba(255, 255, 255, .86);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-weight: 950;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn-yellow { color: var(--navy); background: var(--yellow); box-shadow: 0 14px 26px rgba(255, 209, 102, .34); }
+    .btn-white { color: #fff; background: rgba(255, 255, 255, .16); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); }
+
+    .mascot-wrap {
+      position: absolute;
+      right: 36px;
+      bottom: 20px;
+      width: 150px;
+      height: 150px;
+      display: grid;
+      place-items: center;
+      border-radius: 40px;
+      background: rgba(255, 255, 255, .16);
+      transform: rotate(-4deg);
+    }
+
+    .mascot {
+      width: 92px;
+      height: 96px;
+      position: relative;
+      border-radius: 30px 30px 34px 34px;
+      background: #fff;
+      box-shadow: inset -10px -10px 0 rgba(109, 93, 252, .08);
+    }
+
+    .mascot::before,
+    .mascot::after {
+      content: "";
+      position: absolute;
+      top: -34px;
+      width: 26px;
+      height: 56px;
+      border-radius: 999px;
+      background: #fff;
+    }
+    .mascot::before { left: 18px; transform: rotate(-8deg); }
+    .mascot::after { right: 18px; transform: rotate(8deg); }
+    .face {
+      position: absolute;
+      inset: 0;
+    }
+    .face::before,
+    .face::after {
+      content: "";
+      position: absolute;
+      top: 36px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--purple-dark);
+    }
+    .face::before { left: 28px; }
+    .face::after { right: 28px; }
+    .mouth {
+      position: absolute;
+      left: 50%;
+      top: 54px;
+      width: 28px;
+      height: 14px;
+      transform: translateX(-50%);
+      border-bottom: 4px solid var(--pink);
+      border-radius: 0 0 20px 20px;
+    }
+
+    .quest-card { padding: 24px; }
+    .quest-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .quest-title h2 { margin: 0; color: var(--navy); font-size: 23px; }
+    .level {
+      padding: 9px 11px;
+      border-radius: 14px;
+      color: #fff;
+      background: var(--purple);
+      font-size: 13px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .xp-box {
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fff8dc, #fff0f7);
+      box-shadow: inset 0 0 0 1px rgba(255, 209, 102, .42);
+    }
+    .xp-head { display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--navy); font-weight: 950; }
+    .xp-track { height: 15px; border-radius: 999px; background: rgba(109, 93, 252, .13); overflow: hidden; }
+    .xp-fill { width: 64%; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--purple), var(--pink), var(--yellow)); }
+
+    .mission-list { display: grid; gap: 10px; margin-top: 16px; }
+    .mission {
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 11px;
+      border-radius: 17px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .check {
+      width: 34px; height: 34px; display:grid; place-items:center; border-radius:12px;
+      color:#fff; background: var(--green); font-weight: 950;
+    }
+    .mission strong { display:block; color: var(--navy); font-size: 14px; }
+    .mission span { display:block; color: var(--muted); font-size: 12px; margin-top: 3px; }
+    .coin { color: #a86e00; font-weight: 950; font-size: 13px; }
+
+    .section-title {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 34px 0 16px;
+    }
+    .section-title h2 { margin: 0; color: var(--navy); font-size: 28px; letter-spacing: -0.05em; }
+    .section-title p { margin: 6px 0 0; color: var(--muted); line-height: 1.55; }
+
+    .kpi-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .kpi { padding: 20px; position: relative; overflow: hidden; }
+    .kpi::after {
+      content: ""; position:absolute; right:-24px; top:-24px; width:86px; height:86px; border-radius:50%; background: rgba(109, 93, 252, .12);
+    }
+    .kpi-icon { width: 42px; height:42px; display:grid; place-items:center; border-radius:15px; font-size:24px; background:#f1efff; margin-bottom:14px; }
+    .kpi small { display:block; color:var(--muted); font-weight:900; font-size:12px; text-transform: uppercase; letter-spacing:.05em; }
+    .kpi strong { display:block; margin-top:8px; color:var(--navy); font-size:30px; letter-spacing:-.055em; }
+    .kpi p { margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.45; }
+
+    .game-layout { display:grid; grid-template-columns: minmax(0, 1.05fr) minmax(330px, .95fr); gap: 18px; align-items:start; }
+
+    .hotel-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .hotel-card {
+      position: relative;
+      padding: 18px;
+      border: 2px solid transparent;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 12px 25px rgba(57,48,134,.09);
+      transition: .2s ease;
+    }
+    .hotel-card:hover, .hotel-card.active { transform: translateY(-2px); border-color: var(--purple); }
+    .hotel-card.active::after {
+      content: "선택됨"; position:absolute; top:14px; right:14px; padding:6px 9px; border-radius:999px; background:var(--purple); color:#fff; font-size:11px; font-weight:950;
+    }
+    .hotel-art {
+      height: 92px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.34), transparent),
+        linear-gradient(135deg, #b5e6ff, #ffe0ef);
+      position: relative;
+      overflow: hidden;
+    }
+    .hotel-art::before {
+      content:""; position:absolute; bottom:0; left:22px; width:110px; height:58px; border-radius:14px 14px 0 0; background:#fff6d8; box-shadow: 34px 0 0 #fff, 68px 0 0 #fff6d8, 102px 0 0 rgba(255,255,255,.75);
+    }
+    .hotel-card h3 { margin:0; color:var(--navy); font-size:17px; }
+    .hotel-card p { margin:8px 0 12px; color:var(--muted); font-size:13px; line-height:1.45; }
+    .tags { display:flex; flex-wrap:wrap; gap:7px; }
+    .tag { display:inline-flex; align-items:center; border-radius:999px; padding:6px 9px; background:#f1efff; color:var(--purple-dark); font-size:11px; font-weight:950; }
+    .tag.green { background:#e9fbf3; color:#147a50; }
+    .tag.red { background:#ffe8ef; color:#b92352; }
+    .tag.yellow { background:#fff4cc; color:#8a6100; }
+
+    .sim-panel { padding: 22px; }
+    .panel-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px; }
+    .panel-head h2 { margin:0; color:var(--navy); font-size:24px; }
+    .panel-head p { margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.5; }
+
+    .control { padding:14px; border-radius:18px; background:#fff; border:1px solid var(--line); margin-top:12px; }
+    .control-label { display:flex; justify-content:space-between; gap:12px; color:var(--navy); font-weight:950; font-size:14px; }
+    .control-label span:last-child { color:var(--purple); }
+    input[type="range"] { width:100%; margin-top:12px; accent-color: var(--purple); }
+
+    .result-strip { display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:16px; }
+    .result-tile { padding:14px; border-radius:18px; background:linear-gradient(135deg, var(--navy), var(--purple-dark)); color:#fff; }
+    .result-tile small { color:rgba(255,255,255,.72); font-weight:850; }
+    .result-tile strong { display:block; margin-top:6px; font-size:21px; }
+
+    .dashboard { display:grid; grid-template-columns: minmax(0, 1.25fr) minmax(310px, .75fr); gap:18px; }
+    .chart-card, .risk-card, .quiz-card { padding:22px; }
+    .chart-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+    .chart-head h2, .risk-card h2, .quiz-card h2 { margin:0; color:var(--navy); font-size:23px; }
+    .chart-head p, .risk-card p, .quiz-card p { margin:7px 0 0; color:var(--muted); font-size:13px; line-height:1.5; }
+    .bars { height:230px; display:grid; grid-template-columns: repeat(6, 1fr); gap:12px; align-items:end; padding:20px 4px 28px; border-bottom:1px solid var(--line); }
+    .bar { position:relative; border-radius:14px 14px 0 0; background:linear-gradient(180deg, var(--purple), var(--pink)); min-height:20px; }
+    .bar:nth-child(even) { background:linear-gradient(180deg, var(--cyan), var(--purple)); }
+    .bar span { position:absolute; left:50%; bottom:-26px; transform:translateX(-50%); color:var(--muted); font-size:12px; font-weight:900; }
+    .bar strong { position:absolute; left:50%; top:-24px; transform:translateX(-50%); color:var(--purple-dark); font-size:12px; white-space:nowrap; }
+
+    .risk-list { display:grid; gap:12px; margin-top:16px; }
+    .risk-item { padding:14px; border-radius:18px; background:#fff; border:1px solid var(--line); }
+    .risk-top { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+    .risk-top strong { color:var(--navy); }
+    .impact { padding:5px 8px; border-radius:999px; color:#fff; font-size:11px; font-weight:950; }
+    .impact.plus { background:var(--green); }
+    .impact.minus { background:var(--red); }
+    .risk-item p { margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.45; }
+
+    .quiz-grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:16px; }
+    .quiz-card { position:relative; overflow:hidden; }
+    .quiz-card::after { content:"?"; position:absolute; right:20px; top:8px; font-size:72px; color:rgba(109,93,252,.08); font-weight:950; }
+    .answer { display:grid; gap:9px; margin-top:16px; }
+    .answer button { text-align:left; border:1px solid var(--line); border-radius:15px; background:#fff; padding:11px; color:var(--text); font-weight:850; }
+    .answer button.correct { border-color:rgba(33,181,115,.35); background:#e9fbf3; }
+
+    .notice {
+      margin-top: 28px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(239, 71, 111, .24);
+      background: rgba(255, 255, 255, .72);
+      color: #9b2448;
+      font-size: 14px;
+      line-height: 1.65;
+      font-weight: 800;
+    }
+
+    @media (max-width: 980px) {
+      .hero, .game-layout, .dashboard { grid-template-columns: 1fr; }
+      .kpi-grid, .quiz-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mascot-wrap { display:none; }
+    }
+
+    @media (max-width: 660px) {
+      .page { width: min(100% - 22px, 1180px); padding-top: 12px; }
+      .top-nav, .section-title { align-items:flex-start; flex-direction:column; }
+      .nav-pills { justify-content:flex-start; }
+      .hero-main { padding: 26px; }
+      .kpi-grid, .hotel-grid, .quiz-grid, .result-strip { grid-template-columns: 1fr; }
+      .bars { gap:8px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="top-nav" aria-label="상단 메뉴">
+      <div class="brand">
+        <div class="logo">🏨</div>
+        <div>
+          <strong>Hotel STO Quest</strong>
+          <span>중·고등학생 금융 시뮬레이션</span>
+        </div>
+      </div>
+      <div class="nav-pills">
+        <button class="pill primary" onclick="scrollToId('mission')">오늘의 미션</button>
+        <button class="pill" onclick="scrollToId('simulator')">수익 실험</button>
+        <button class="pill" onclick="scrollToId('risk')">리스크 배틀</button>
+        <button class="pill" onclick="scrollToId('quiz')">퀴즈</button>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-main">
+        <div class="hero-content">
+          <div class="badge-row">
+            <span class="mini-badge">🎮 Quest Mode</span>
+            <span class="mini-badge">💰 가상 토큰</span>
+            <span class="mini-badge">📚 실제 투자 아님</span>
+          </div>
+          <h1>호텔을 운영해서 배당 미션을 클리어하라</h1>
+          <p>
+            객실 점유율, 객실단가, 운영비를 바꾸며 호텔 수익이 어떻게 변하는지 실험합니다.
+            어려운 STO와 배당 구조를 게임 미션처럼 단계별로 배웁니다.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-yellow" onclick="scrollToId('simulator')">미션 시작하기</button>
+            <button class="btn btn-white" onclick="scrollToId('quiz')">퀴즈로 복습하기</button>
+          </div>
+        </div>
+        <div class="mascot-wrap" aria-hidden="true">
+          <div class="mascot"><div class="face"></div><div class="mouth"></div></div>
+        </div>
+      </div>
+
+      <aside class="quest-card" id="mission">
+        <div class="quest-title">
+          <div>
+            <h2>오늘의 학습 퀘스트</h2>
+            <p style="margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.5">미션을 완료하면 금융 XP가 올라갑니다.</p>
+          </div>
+          <span class="level">Lv. 3</span>
+        </div>
+        <div class="xp-box">
+          <div class="xp-head"><span>금융 이해도 XP</span><span>640 / 1000</span></div>
+          <div class="xp-track"><div class="xp-fill"></div></div>
+        </div>
+        <div class="mission-list">
+          <div class="mission"><div class="check">✓</div><div><strong>객실매출 계산하기</strong><span>점유율과 ADR의 의미 이해</span></div><div class="coin">+120XP</div></div>
+          <div class="mission"><div class="check">✓</div><div><strong>배당가능이익 찾기</strong><span>매출과 배당의 차이 구분</span></div><div class="coin">+180XP</div></div>
+          <div class="mission"><div class="check" style="background:var(--purple)">3</div><div><strong>리스크 이벤트 적용</strong><span>기상 악화가 수익에 미치는 영향</span></div><div class="coin">+240XP</div></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section-title">
+      <div>
+        <h2>실시간 미션 점수판</h2>
+        <p>슬라이더를 조정하면 객실매출, 배당가능이익, 내 배당금, ROI가 즉시 바뀝니다.</p>
+      </div>
+      <span class="tag yellow">Simulation Only</span>
+    </section>
+
+    <section class="kpi-grid" aria-label="핵심 지표">
+      <article class="card kpi"><div class="kpi-icon">🛏️</div><small>객실매출</small><strong id="roomRevenue">1.80억</strong><p>객실 수 × 영업일수 × 점유율 × ADR</p></article>
+      <article class="card kpi"><div class="kpi-icon">🏦</div><small>배당가능이익</small><strong id="profit">7,600만</strong><p>운영비와 예비비를 뺀 학습용 금액</p></article>
+      <article class="card kpi"><div class="kpi-icon">🪙</div><small>내 예상 배당금</small><strong id="dividend">76,002원</strong><p>가상 토큰 보유비율 기준</p></article>
+      <article class="card kpi"><div class="kpi-icon">🚀</div><small>월 ROI</small><strong id="roi">7.60%</strong><p>월 배당금 ÷ 모의 투자금</p></article>
+    </section>
+
+    <section class="section-title" id="simulator">
+      <div>
+        <h2>호텔 선택 & 수익 실험실</h2>
+        <p>호텔을 고르고 운영 조건을 바꿔 보세요. 결과가 바로 점수판에 반영됩니다.</p>
+      </div>
+    </section>
+
+    <section class="game-layout">
+      <div class="hotel-grid">
+        <article class="hotel-card active" data-room="80" data-adr="110000" data-occ="68" data-cost="58" data-name="부산 해운대 비즈니스호텔">
+          <div class="hotel-art"></div><h3>부산 해운대 비즈니스호텔</h3><p>관광과 출장 수요가 섞인 균형형 스테이지</p><div class="tags"><span class="tag green">난이도 보통</span><span class="tag">월별 배당</span></div>
+        </article>
+        <article class="hotel-card" data-room="120" data-adr="145000" data-occ="61" data-cost="64" data-name="제주 리조트형 호텔">
+          <div class="hotel-art"></div><h3>제주 리조트형 호텔</h3><p>성수기 보너스가 크지만 비수기 리스크도 큼</p><div class="tags"><span class="tag red">난이도 높음</span><span class="tag yellow">계절성</span></div>
+        </article>
+        <article class="hotel-card" data-room="45" data-adr="185000" data-occ="73" data-cost="67" data-name="서울 도심 부티크호텔">
+          <div class="hotel-art"></div><h3>서울 도심 부티크호텔</h3><p>객실단가는 높지만 운영비 관리가 핵심</p><div class="tags"><span class="tag red">운영비 높음</span><span class="tag">고 ADR</span></div>
+        </article>
+        <article class="hotel-card" data-room="60" data-adr="92000" data-occ="55" data-cost="52" data-name="부산 원도심 리노베이션 호텔">
+          <div class="hotel-art"></div><h3>부산 원도심 리노베이션 호텔</h3><p>지역재생형 호텔 스테이지. 안정형 학습에 적합</p><div class="tags"><span class="tag green">난이도 낮음</span><span class="tag">지역재생</span></div>
+        </article>
+      </div>
+
+      <aside class="card sim-panel">
+        <div class="panel-head">
+          <div><h2 id="selectedHotel">부산 해운대 비즈니스호텔</h2><p>운영 조건을 조정해서 배당 미션을 클리어하세요.</p></div>
+          <span class="tag yellow">+500XP 가능</span>
+        </div>
+        <div class="control"><div class="control-label"><span>객실 점유율</span><span id="occText">68%</span></div><input id="occupancy" type="range" min="25" max="95" value="68" /></div>
+        <div class="control"><div class="control-label"><span>평균 객실단가 ADR</span><span id="adrText">110,000원</span></div><input id="adr" type="range" min="60000" max="250000" step="5000" value="110000" /></div>
+        <div class="control"><div class="control-label"><span>운영비율</span><span id="costText">58%</span></div><input id="cost" type="range" min="35" max="85" value="58" /></div>
+        <div class="control"><div class="control-label"><span>모의 투자금</span><span id="investText">1,000,000원</span></div><input id="investment" type="range" min="100000" max="5000000" step="100000" value="1000000" /></div>
+        <div class="result-strip">
+          <div class="result-tile"><small>보유 토큰</small><strong id="tokens">100개</strong></div>
+          <div class="result-tile"><small>보유비율</small><strong id="ratio">0.100%</strong></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section-title" id="risk">
+      <div><h2>리스크 배틀</h2><p>호텔 운영에는 좋은 이벤트와 나쁜 이벤트가 모두 생깁니다. 수익률 변화를 비교하세요.</p></div>
+    </section>
+
+    <section class="dashboard">
+      <article class="card chart-card">
+        <div class="chart-head">
+          <div><h2>월별 배당 보상 차트</h2><p>막대가 높을수록 해당 월의 예상 배당금이 높다는 뜻입니다.</p></div>
+          <span class="tag">월별 미션</span>
+        </div>
+        <div class="bars">
+          <div class="bar" style="height:45%"><strong>2.8만</strong><span>1월</span></div>
+          <div class="bar" style="height:38%"><strong>2.1만</strong><span>2월</span></div>
+          <div class="bar" style="height:58%"><strong>3.9만</strong><span>3월</span></div>
+          <div class="bar" style="height:74%"><strong>5.1만</strong><span>6월</span></div>
+          <div class="bar" style="height:92%"><strong>6.8만</strong><span>8월</span></div>
+          <div class="bar" style="height:62%"><strong>4.3만</strong><span>10월</span></div>
+        </div>
+      </article>
+
+      <aside class="card risk-card">
+        <h2>이벤트 카드</h2>
+        <p>카드를 눌러 수익률 변화를 적용합니다.</p>
+        <div class="risk-list">
+          <div class="risk-item" onclick="applyEvent('weather')"><div class="risk-top"><strong>🌧️ 기상 악화</strong><span class="impact minus">점유율 -25%</span></div><p>관광 수요 감소로 객실매출이 줄어듭니다.</p></div>
+          <div class="risk-item" onclick="applyEvent('fee')"><div class="risk-top"><strong>💳 OTA 수수료 인상</strong><span class="impact minus">운영비 +5%</span></div><p>판매 채널 비용이 늘어 배당가능이익이 줄어듭니다.</p></div>
+          <div class="risk-item" onclick="applyEvent('festival')"><div class="risk-top"><strong>🎆 지역 축제 개최</strong><span class="impact plus">ADR +10%</span></div><p>객실단가가 올라 배당금이 늘어날 수 있습니다.</p></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section-title" id="quiz">
+      <div><h2>3문제 퀴즈 던전</h2><p>숫자만 보는 게 아니라 개념을 맞혀야 다음 단계로 넘어갈 수 있습니다.</p></div>
+    </section>
+
+    <section class="quiz-grid">
+      <article class="card quiz-card"><h2>Q1. 객실매출 공식은?</h2><div class="answer"><button class="correct">객실 수 × 영업일수 × 점유율 × ADR</button><button>투자금 × 토큰 가격</button><button>배당금 × 운영비율</button></div></article>
+      <article class="card quiz-card"><h2>Q2. 매출 전체가 배당되나?</h2><div class="answer"><button>그렇다</button><button class="correct">아니다. 비용 차감 후 남은 금액 기준</button><button>토큰 가격만 보면 된다</button></div></article>
+      <article class="card quiz-card"><h2>Q3. 운영비율이 오르면?</h2><div class="answer"><button class="correct">배당가능이익이 줄 수 있다</button><button>항상 배당금이 증가한다</button><button>점유율이 자동 상승한다</button></div></article>
+    </section>
+
+    <p class="notice">
+      본 화면은 중·고등학생 대상 금융교육용 시뮬레이션입니다. 실제 투자, 청약, 매수/매도, 결제, 배당 지급 기능을 제공하지 않습니다. 표시되는 수익률과 배당금은 가상의 조건에 따른 학습용 계산 결과입니다.
+    </p>
+  </main>
+
+  <script>
+    const fmt = new Intl.NumberFormat('ko-KR');
+    const state = { room: 80, totalOffering: 1000000000, tokenPrice: 10000 };
+
+    function won(v) { return fmt.format(Math.round(v)) + '원'; }
+    function shortWon(v) {
+      if (v >= 100000000) return (v / 100000000).toFixed(2).replace(/\.00$/, '') + '억';
+      if (v >= 10000) return fmt.format(Math.round(v / 10000)) + '만';
+      return won(v);
+    }
+    function scrollToId(id) { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+
+    function update() {
+      const occ = Number(document.getElementById('occupancy').value);
+      const adr = Number(document.getElementById('adr').value);
+      const cost = Number(document.getElementById('cost').value);
+      const investment = Number(document.getElementById('investment').value);
+      const roomRevenue = state.room * 30 * (occ / 100) * adr;
+      const additional = roomRevenue * 0.12;
+      const total = roomRevenue + additional;
+      const operatingCost = total * (cost / 100);
+      const operatingProfit = total - operatingCost;
+      const profit = Math.max(0, operatingProfit * 0.9);
+      const ratio = investment / state.totalOffering;
+      const dividend = profit * ratio;
+      const roi = investment > 0 ? dividend / investment * 100 : 0;
+      const tokens = investment / state.tokenPrice;
+
+      document.getElementById('occText').textContent = occ + '%';
+      document.getElementById('adrText').textContent = won(adr);
+      document.getElementById('costText').textContent = cost + '%';
+      document.getElementById('investText').textContent = won(investment);
+      document.getElementById('roomRevenue').textContent = shortWon(roomRevenue);
+      document.getElementById('profit').textContent = shortWon(profit);
+      document.getElementById('dividend').textContent = won(dividend);
+      document.getElementById('roi').textContent = roi.toFixed(2) + '%';
+      document.getElementById('tokens').textContent = fmt.format(tokens) + '개';
+      document.getElementById('ratio').textContent = (ratio * 100).toFixed(3) + '%';
+    }
+
+    function applyEvent(type) {
+      const occ = document.getElementById('occupancy');
+      const adr = document.getElementById('adr');
+      const cost = document.getElementById('cost');
+      if (type === 'weather') occ.value = Math.max(25, Number(occ.value) - 25);
+      if (type === 'fee') cost.value = Math.min(85, Number(cost.value) + 5);
+      if (type === 'festival') adr.value = Math.min(250000, Math.round(Number(adr.value) * 1.1 / 5000) * 5000);
+      update();
+      scrollToId('simulator');
+    }
+
+    document.querySelectorAll('input[type="range"]').forEach(input => input.addEventListener('input', update));
+    document.querySelectorAll('.hotel-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.hotel-card').forEach(item => item.classList.remove('active'));
+        card.classList.add('active');
+        state.room = Number(card.dataset.room);
+        document.getElementById('selectedHotel').textContent = card.dataset.name;
+        document.getElementById('occupancy').value = card.dataset.occ;
+        document.getElementById('adr').value = card.dataset.adr;
+        document.getElementById('cost').value = card.dataset.cost;
+        update();
+      });
+    });
+    update();
+  </script>
+</body>
+</html>
