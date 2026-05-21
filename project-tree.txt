@@ -1,0 +1,41 @@
+hotel-sto-lab/
+├─ README.md
+├─ project-tree.txt
+├─ git-commit-messages.md
+├─ docs/
+│  ├─ 00-integrated-plan.md
+│  ├─ 01-project-overview.md
+│  ├─ 02-market-regulation-research.md
+│  ├─ 03-hotel-revenue-model.md
+│  ├─ 04-token-offering-simulation.md
+│  ├─ 05-erd.md
+│  ├─ 06-api-spec.md
+│  ├─ 07-frontend-screen-design.md
+│  ├─ 08-calculation-engine.md
+│  ├─ 09-dashboard-visualization.md
+│  ├─ 10-risk-event-simulation.md
+│  └─ compliance-notice.md
+├─ db/
+│  ├─ schema.sql
+│  └─ seed.sql
+├─ data/
+│  ├─ hotel-project-sample.csv
+│  ├─ token-offering-sample.csv
+│  ├─ risk-event-sample.csv
+│  └─ monthly-operation-sample.csv
+├─ backend/
+│  ├─ README.md
+│  ├─ build.gradle
+│  ├─ settings.gradle
+│  └─ src/
+├─ frontend/
+│  ├─ README.md
+│  ├─ package.json
+│  ├─ tsconfig.json
+│  └─ src/
+├─ preview/
+│  └─ index.html
+└─ deliverables/
+   ├─ hotel_sto_lab_integrated_plan.md
+   ├─ hotel_sto_lab_integrated_plan.docx
+   └─ hotel_sto_lab_schema.sql

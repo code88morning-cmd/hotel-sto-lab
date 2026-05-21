@@ -1,0 +1,5 @@
+﻿risk_event_id,event_name,event_type,target_variable,impact_type,impact_value
+RISK-001,성수기 관광객 증가,POSITIVE,occupancyRate,ADD_RATE,0.15
+RISK-002,지역 축제 개최,POSITIVE,adr,MULTIPLY_AMOUNT,0.10
+RISK-004,기상 악화,NEGATIVE,occupancyRate,ADD_RATE,-0.25
+RISK-005,OTA 수수료 인상,NEGATIVE,operatingCostRate,ADD_RATE,0.05

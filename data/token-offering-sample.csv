@@ -1,0 +1,3 @@
+﻿offering_id,hotel_id,total_offering_amount,token_price,total_token_supply,dividend_cycle,offering_status
+OFFERING-001,HOTEL-001,1000000000,10000,100000,MONTHLY,OPEN_SIMULATION
+OFFERING-002,HOTEL-002,2000000000,10000,200000,MONTHLY,OPEN_SIMULATION

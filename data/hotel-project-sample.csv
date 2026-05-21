@@ -1,0 +1,5 @@
+﻿hotel_id,hotel_name,location,room_count,base_adr,base_occupancy_rate,operating_cost_rate,risk_level
+HOTEL-001,부산 해운대 비즈니스호텔,"Busan, Haeundae",80,110000,0.68,0.58,MEDIUM
+HOTEL-002,제주 리조트형 호텔,Jeju,120,145000,0.61,0.64,HIGH
+HOTEL-003,서울 도심 부티크호텔,Seoul,45,185000,0.73,0.67,MEDIUM
+HOTEL-004,부산 원도심 리노베이션 호텔,"Busan, Old Downtown",60,92000,0.55,0.52,LOW
